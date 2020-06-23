@@ -40,10 +40,10 @@ public class PointCloudReader : MonoBehaviour
         return EditorUtility.OpenFilePanel("Objeto OBJ", "", "obj");
     }
 
-    public static CloudPoint ConvertOBJFileToData()
+    /*public static CloudPoint ConvertOBJFileToData()
     {
 
-    }
+    }*/
 
     //Metodo para abrir un archivo con un formato coincidente xyz
     public static string OpenXYZFile()
@@ -122,7 +122,7 @@ public class PointCloudReader : MonoBehaviour
                                 }
 
                                 //Crea un objeto Point y lo guarda en el objeto cloudPoint
-                                DataObjects.Point element = new DataObjects.Point(components[0], components[1], components[2]);
+                                Vector3 element = new Vector3((float)components[0], (float)components[1], (float)components[2]);
                                 cloudPoint.AddPoint(element);
 
                                 //Comprueba si la magnitud del punto es menor a boundingBoxMinPointMagnitude, de ser asi entonces es ahora el mas pequeño

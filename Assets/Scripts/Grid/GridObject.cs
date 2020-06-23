@@ -10,7 +10,7 @@ public class GridObject<T>
     private int height;
     private float unitSize;
 
-    private DataObjects.Point origin;
+    private Vector3 origin;
     private T[,,] grid;
 
     //Metodo para obtener/cambiar la longitud
@@ -42,14 +42,14 @@ public class GridObject<T>
     }
 
     //Metodo para obtener/cambiar el origen
-    public DataObjects.Point Origin
+    public Vector3 Origin
     {
         get { return origin; }
         set { origin = value; }
     }
 
     //Constructor para inicializar la malla
-    public GridObject(int length, int width, int height, float unitSize, DataObjects.Point origin, T defaultValue)
+    public GridObject(int length, int width, int height, float unitSize, Vector3 origin, T defaultValue)
     {
         //Guarda los datos
         this.length = length;
@@ -75,7 +75,7 @@ public class GridObject<T>
     }
 
     //Metodo para convertir coordenadas de la escena en coordenadas de la malla
-    public DataObjects.Point WorldCoordinatesToGrid(float x, float y, float z)
+    public Vector3 WorldCoordinatesToGrid(float x, float y, float z)
     {
         //Guarda las coordenadas relativas a la malla y la escala al tamaño de la malla
         float relativeX = (x - (float)origin.x) / unitSize;
@@ -85,11 +85,11 @@ public class GridObject<T>
         //Si alguna es negativa entonces no puede funcionar
         if (relativeX < 0 || relativeX >= length || relativeY < 0 || relativeY >= height || relativeZ < 0 || relativeZ >= width)
         {
-            return new DataObjects.Point(-1, -1, -1);
+            return new Vector3(-1, -1, -1);
         }
 
         //Retorna la coordenada convirtiendolas a enteros, esto hace que por ejemplo 4.9 siga perteneciendo a la coordenada 4 en la malla
-        return new DataObjects.Point((int)relativeX, (int)relativeY, (int)relativeZ);
+        return new Vector3((int)relativeX, (int)relativeY, (int)relativeZ);
     }
 
     //Metodo para convertir coordenadas de la malla en coordenadas de la escena
@@ -125,10 +125,10 @@ public class GridObject<T>
     public bool SetDataFromWorldCoordinates(float x, float y, float z, T value)
     {
         //Obtiene las coordenadas de la malla
-        DataObjects.Point gridCoordinates = WorldCoordinatesToGrid(x, y, z);
+        Vector3 gridCoordinates = WorldCoordinatesToGrid(x, y, z);
 
         //Si esta dentro de rango
-        if(gridCoordinates != new DataObjects.Point(-1, -1, -1))
+        if(gridCoordinates != new Vector3(-1, -1, -1))
         {
             //Guarda la informacion en la coordenada retornada
             grid[(int)gridCoordinates.x, (int)gridCoordinates.y,(int)gridCoordinates.z] = value;
@@ -142,15 +142,26 @@ public class GridObject<T>
     public T GetDataFromWorldCoordinates(float x, float y, float z)
     {
         //Obtiene las coordenadas de la malla
-        DataObjects.Point gridCoordinates = WorldCoordinatesToGrid(x, y, z);
+        Vector3 gridCoordinates = WorldCoordinatesToGrid(x, y, z);
 
         //Si esta dentro de rango
-        if (gridCoordinates != new DataObjects.Point(-1, -1, -1))
+        if (gridCoordinates != new Vector3(-1, -1, -1))
         {
             //Guarda la informacion en la coordenada retornada
             return grid[(int)gridCoordinates.x, (int)gridCoordinates.y, (int)gridCoordinates.z];
         }
 
         return default(T);
+    }
+
+    //Metodo para calcular la posicion de un cubo sobre la malla
+    public Vector3 GetCellWorldPosition(int x, int y, int z)
+    {
+        //Calcula las coordenadas en el mundo
+        float xWorld = (float)origin.x + (x * unitSize) + unitSize/2f;
+        float yWorld = (float)origin.y + (y * unitSize) + unitSize/2f;
+        float zWorld = (float)origin.z + (z * unitSize) + unitSize/2f;
+
+        return new Vector3(xWorld, yWorld, zWorld);
     }
 }

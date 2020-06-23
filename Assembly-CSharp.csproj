@@ -70,6 +70,7 @@
     <Compile Include="Assets\Scripts\Grid\GridObject.cs" />
     <Compile Include="Assets\Scripts\Procedural\NoiseGenerator.cs" />
     <Compile Include="Assets\Scripts\Procedural\PointCloudProcessor.cs" />
+    <Compile Include="Assets\Scripts\Procedural\Terrain\TerrainGenerator.cs" />
     <Compile Include="Assets\Scripts\Structures\CList.cs" />
     <Compile Include="Assets\Scripts\Structures\DataObjects.cs" />
     <Reference Include="Unity.Timeline.Editor">

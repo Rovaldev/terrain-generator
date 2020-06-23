@@ -7,18 +7,15 @@ public class CubicGridController : MonoBehaviour
     //Atributos
     public int fixedSize;
     public int density;
-    public Transform test;
+    public bool drawVolume = false;
 
     private GridObject<int> grid;
     private float unitSize;
 
-    private void Start()
+    private void Awake()
     {
-        //Origen de la malla
-        DataObjects.Point origin = new DataObjects.Point(transform.position.x, transform.position.y, transform.position.z);
-
         //Inicializa la malla con los parametros dados
-        grid = new GridObject<int>(density, density, density, UnitSizeDensityBased(), origin, -1);
+        grid = new GridObject<int>(density, density, density, UnitSizeDensityBased(), transform.position, -10);
     }
 
     private void Update()
@@ -32,7 +29,7 @@ public class CubicGridController : MonoBehaviour
         grid.UnitSize = UnitSizeDensityBased();
 
         //Actualiza el origen constantemente
-        grid.Origin = new DataObjects.Point(transform.position.x, transform.position.y, transform.position.z);
+        grid.Origin = transform.position;
     }
 
     //Calcula la cantidad de cuadros en base a la densidad
@@ -47,70 +44,82 @@ public class CubicGridController : MonoBehaviour
     {
         unitSize = UnitSizeDensityBased();
 
-        //Dibuja el plano xy frontal simulando el grid resultante
-        for(int x=0; x<density; x++)
+        //SOlamente si se puede dibujar
+        if (drawVolume && density > 0)
         {
-            float xScaled = x * unitSize;
-
-            for (int y=0; y<density; y++)
+            //Dibuja el plano xy frontal simulando el grid resultante
+            for (int x = 0; x < density; x++)
             {
-                float yScaled = y * unitSize;
+                float xScaled = x * unitSize;
 
-                Debug.DrawLine(new Vector3(transform.position.x + xScaled, transform.position.y + yScaled, transform.position.z), new Vector3(transform.position.x + xScaled + unitSize, transform.position.y + yScaled, transform.position.z));
-                Debug.DrawLine(new Vector3(transform.position.x + xScaled, transform.position.y + yScaled, transform.position.z), new Vector3(transform.position.x + xScaled, transform.position.y + yScaled + unitSize, transform.position.z));
+                for (int y = 0; y < density; y++)
+                {
+                    float yScaled = y * unitSize;
+
+                    Debug.DrawLine(new Vector3(transform.position.x + xScaled, transform.position.y + yScaled, transform.position.z), new Vector3(transform.position.x + xScaled + unitSize, transform.position.y + yScaled, transform.position.z));
+                    Debug.DrawLine(new Vector3(transform.position.x + xScaled, transform.position.y + yScaled, transform.position.z), new Vector3(transform.position.x + xScaled, transform.position.y + yScaled + unitSize, transform.position.z));
+                }
             }
+
+            Debug.DrawLine(new Vector3(transform.position.x, transform.position.y + unitSize * density, transform.position.z), new Vector3(transform.position.x + unitSize * density, transform.position.y + unitSize * density, transform.position.z));
+            Debug.DrawLine(new Vector3(transform.position.x + unitSize * density, transform.position.y + unitSize * density, transform.position.z), new Vector3(transform.position.x + unitSize * density, transform.position.y, transform.position.z));
+
+            //Dibuja el plano xy trasero simulando el grid resultante
+            for (int x = 0; x < density; x++)
+            {
+                float xScaled = x * unitSize;
+
+                for (int y = 0; y < density; y++)
+                {
+                    float yScaled = y * unitSize;
+
+                    Debug.DrawLine(new Vector3(transform.position.x + xScaled, transform.position.y + yScaled, transform.position.z + unitSize * density), new Vector3(transform.position.x + xScaled + unitSize, transform.position.y + yScaled, transform.position.z + unitSize * density));
+                    Debug.DrawLine(new Vector3(transform.position.x + xScaled, transform.position.y + yScaled, transform.position.z + unitSize * density), new Vector3(transform.position.x + xScaled, transform.position.y + yScaled + unitSize, transform.position.z + unitSize * density));
+                }
+            }
+
+            Debug.DrawLine(new Vector3(transform.position.x, transform.position.y + unitSize * density, transform.position.z + unitSize * density), new Vector3(transform.position.x + unitSize * density, transform.position.y + unitSize * density, transform.position.z + unitSize * density));
+            Debug.DrawLine(new Vector3(transform.position.x + unitSize * density, transform.position.y + unitSize * density, transform.position.z + unitSize * density), new Vector3(transform.position.x + unitSize * density, transform.position.y, transform.position.z + unitSize * density));
+
+            //Dibuja el plano zy delantero simulando el grid resultante
+            for (int x = 0; x < density; x++)
+            {
+                float zScaled = x * unitSize;
+
+                for (int y = 0; y < density; y++)
+                {
+                    float yScaled = y * unitSize;
+
+                    Debug.DrawLine(new Vector3(transform.position.x, transform.position.y + yScaled, transform.position.z + zScaled), new Vector3(transform.position.x, transform.position.y + yScaled, transform.position.z + zScaled + unitSize));
+                    Debug.DrawLine(new Vector3(transform.position.x, transform.position.y + yScaled, transform.position.z + zScaled), new Vector3(transform.position.x, transform.position.y + yScaled + unitSize, transform.position.z + zScaled));
+                }
+            }
+
+            Debug.DrawLine(new Vector3(transform.position.x, transform.position.y + unitSize * density, transform.position.z), new Vector3(transform.position.x, transform.position.y + unitSize * density, transform.position.z + unitSize * density));
+
+            //Dibuja el plano zy trasero simulando el grid resultante
+            for (int x = 0; x < density; x++)
+            {
+                float zScaled = x * unitSize;
+
+                for (int y = 0; y < density; y++)
+                {
+                    float yScaled = y * unitSize;
+
+                    Debug.DrawLine(new Vector3(transform.position.x + unitSize * density, transform.position.y + yScaled, transform.position.z + zScaled), new Vector3(transform.position.x + unitSize * density, transform.position.y + yScaled, transform.position.z + zScaled + unitSize));
+                    Debug.DrawLine(new Vector3(transform.position.x + unitSize * density, transform.position.y + yScaled, transform.position.z + zScaled), new Vector3(transform.position.x + unitSize * density, transform.position.y + yScaled + unitSize, transform.position.z + zScaled));
+                }
+            }
+
+            Debug.DrawLine(new Vector3(transform.position.x + unitSize * density, transform.position.y + unitSize * density, transform.position.z), new Vector3(transform.position.x + unitSize * density, transform.position.y + unitSize * density, transform.position.z + unitSize * density));
         }
 
-        Debug.DrawLine(new Vector3(transform.position.x, transform.position.y + unitSize * density, transform.position.z), new Vector3(transform.position.x + unitSize * density, transform.position.y + unitSize * density, transform.position.z));
-        Debug.DrawLine(new Vector3(transform.position.x + unitSize * density, transform.position.y + unitSize * density, transform.position.z), new Vector3(transform.position.x + unitSize * density, transform.position.y, transform.position.z));
+        
+    }
 
-        //Dibuja el plano xy trasero simulando el grid resultante
-        for (int x = 0; x < density; x++)
-        {
-            float xScaled = x * unitSize;
-
-            for (int y = 0; y < density; y++)
-            {
-                float yScaled = y * unitSize;
-
-                Debug.DrawLine(new Vector3(transform.position.x + xScaled, transform.position.y + yScaled, transform.position.z + unitSize * density), new Vector3(transform.position.x + xScaled + unitSize, transform.position.y + yScaled, transform.position.z + unitSize * density));
-                Debug.DrawLine(new Vector3(transform.position.x + xScaled, transform.position.y + yScaled, transform.position.z + unitSize * density), new Vector3(transform.position.x + xScaled, transform.position.y + yScaled + unitSize, transform.position.z + unitSize * density));
-            }
-        }
-
-        Debug.DrawLine(new Vector3(transform.position.x, transform.position.y + unitSize * density, transform.position.z + unitSize * density), new Vector3(transform.position.x + unitSize * density, transform.position.y + unitSize * density, transform.position.z + unitSize * density));
-        Debug.DrawLine(new Vector3(transform.position.x + unitSize * density, transform.position.y + unitSize * density, transform.position.z + unitSize * density), new Vector3(transform.position.x + unitSize * density, transform.position.y, transform.position.z + unitSize * density));
-
-        //Dibuja el plano zy delantero simulando el grid resultante
-        for (int x = 0; x < density; x++)
-        {
-            float zScaled = x * unitSize;
-
-            for (int y = 0; y < density; y++)
-            {
-                float yScaled = y * unitSize;
-
-                Debug.DrawLine(new Vector3(transform.position.x, transform.position.y + yScaled, transform.position.z + zScaled), new Vector3(transform.position.x, transform.position.y + yScaled, transform.position.z + zScaled + unitSize));
-                Debug.DrawLine(new Vector3(transform.position.x, transform.position.y + yScaled, transform.position.z + zScaled), new Vector3(transform.position.x, transform.position.y + yScaled + unitSize, transform.position.z + zScaled));
-            }
-        }
-
-        Debug.DrawLine(new Vector3(transform.position.x, transform.position.y + unitSize * density, transform.position.z), new Vector3(transform.position.x, transform.position.y + unitSize * density, transform.position.z + unitSize * density));
-
-        //Dibuja el plano zy trasero simulando el grid resultante
-        for (int x = 0; x < density; x++)
-        {
-            float zScaled = x * unitSize;
-
-            for (int y = 0; y < density; y++)
-            {
-                float yScaled = y * unitSize;
-
-                Debug.DrawLine(new Vector3(transform.position.x + unitSize * density, transform.position.y + yScaled, transform.position.z + zScaled), new Vector3(transform.position.x + unitSize * density, transform.position.y + yScaled, transform.position.z + zScaled + unitSize));
-                Debug.DrawLine(new Vector3(transform.position.x + unitSize * density, transform.position.y + yScaled, transform.position.z + zScaled), new Vector3(transform.position.x + unitSize * density, transform.position.y + yScaled + unitSize, transform.position.z + zScaled));
-            }
-        }
-
-        Debug.DrawLine(new Vector3(transform.position.x + unitSize * density, transform.position.y + unitSize * density, transform.position.z), new Vector3(transform.position.x + unitSize * density, transform.position.y + unitSize * density, transform.position.z + unitSize * density));
+    //Metodo para obtener el grid
+    public GridObject<int> Grid
+    {
+        get { return grid; }
     }
 }

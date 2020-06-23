@@ -18,11 +18,8 @@ public class GridController : MonoBehaviour
 
     private void Start()
     {
-        //Origen de la malla
-        DataObjects.Point origin = new DataObjects.Point(transform.position.x, transform.position.y, transform.position.z);
-
         //Inicializa la malla con los parametros dados
-        grid = new GridObject<int>(length, width, height, unitSize, origin, -1);
+        grid = new GridObject<int>(length, width, height, unitSize, transform.position, -1);
     }
 
     private void Update()
@@ -36,7 +33,7 @@ public class GridController : MonoBehaviour
         grid.UnitSize = unitSize;
 
         //Actualiza el origen constantemente
-        grid.Origin = new DataObjects.Point(transform.position.x, transform.position.y, transform.position.z);
+        grid.Origin = transform.position;
     }
 
     //Metodo para dibujar la malla
@@ -107,5 +104,11 @@ public class GridController : MonoBehaviour
         }
 
         Debug.DrawLine(new Vector3(transform.position.x, transform.position.y + (height * unitSize), transform.position.z), new Vector3(transform.position.x, transform.position.y + (height * unitSize), transform.position.z + (width * unitSize)), Color.white);
+    }
+
+    //Metodo para obtener el grid
+    public GridObject<int> Grid
+    {
+        get { return grid; }
     }
 }

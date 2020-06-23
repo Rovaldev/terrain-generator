@@ -6,7 +6,7 @@ using UnityEngine;
 public class DataObjects : MonoBehaviour
 {
     //Estructura punto para guarda
-    public struct Point
+    /*public struct Point
     {
         public double x;
         public double y;
@@ -59,5 +59,5 @@ public class DataObjects : MonoBehaviour
                 return (float)Math.Sqrt((this.x * this.x) + (this.y * this.y) + (this.z * this.z));
             }
         }
-    }
+    }*/
 }
