@@ -5,7 +5,7 @@ using UnityEngine;
 public class PointCloudProcessor : MonoBehaviour
 {
     //Atributos
-    public GridController gridController;
+    public DynamicGridController gridController;
 
     //Adapta la informacion de una nube de puntos a la malla
     public void FillGrid(CloudPoint cloudPoint)

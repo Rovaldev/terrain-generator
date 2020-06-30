@@ -59,14 +59,14 @@ public class GridObject<T>
         this.origin = origin;
 
         //Inicializa el tamaño de la malla
-        grid = new T[length, height, width];
+        grid = new T[width, height, length];
 
         //inicializa los datos de la malla
-        for(int x=0; x<length; x++)
+        for(int x=0; x<width; x++)
         {
             for(int y=0; y<height; y++)
             {
-                for(int z=0; z<width; z++)
+                for(int z=0; z<length; z++)
                 {
                     grid[x, y, z] = defaultValue;
                 }
@@ -83,7 +83,7 @@ public class GridObject<T>
         float relativeZ = (z - (float)origin.z) / unitSize;
         
         //Si alguna es negativa entonces no puede funcionar
-        if (relativeX < 0 || relativeX >= length || relativeY < 0 || relativeY >= height || relativeZ < 0 || relativeZ >= width)
+        if (relativeX < 0 || relativeX >= width || relativeY < 0 || relativeY >= height || relativeZ < 0 || relativeZ >= length)
         {
             return new Vector3(-1, -1, -1);
         }
@@ -98,7 +98,7 @@ public class GridObject<T>
     public T GetDataFromGridCoordinates(int x, int y, int z)
     {
         //Comprueba que todos los valores esten dentro del rango
-        if (x < 0 || x >= length || y < 0 || y >= height || z < 0 || z >= width)
+        if (x < 0 || x >= width || y < 0 || y >= height || z < 0 || z >= length)
         {
             return default(T);
         }
@@ -111,7 +111,7 @@ public class GridObject<T>
     public bool SetDataFromGridCoordinates(int x, int y, int z, T value)
     {
         //Comprueba que todos los valores esten dentro del rango
-        if (x < 0 || x >= length || y < 0 || y >= height || z < 0 || z >= width)
+        if (x < 0 || x >= width || y < 0 || y >= height || z < 0 || z >= length)
         {
             return false;
         }
